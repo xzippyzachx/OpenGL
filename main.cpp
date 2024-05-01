@@ -73,17 +73,52 @@ int main()
 	// Sets rules for outcomes of stecil tests
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
+	glFrontFace(GL_CCW);
+
 	Model goblin("models/goblin/goblin.gltf");
 	Model floor("models/floor/Floor.gltf");
 
+	double prevTime = 0.0f;
+	double currTime = 0.0f;
+	double timeDiff;
+	unsigned int counter = 0;
+
+	float prevTimeDelta = 0.0f;
+	float deltaTime;
+
+	// Set Vsync
+	glfwSwapInterval(1);
+
 	while (!glfwWindowShouldClose(window))
 	{
+		currTime = glfwGetTime();
+		timeDiff = currTime - prevTime;
+		counter++;
+
+		deltaTime = currTime - prevTimeDelta;
+		prevTimeDelta = currTime;
+
+		if (timeDiff >= 1.0 / 30.0)
+		{
+			// Creates new title
+			std::string FPS = std::to_string((1.0 / timeDiff) * counter);
+			std::string ms = std::to_string((timeDiff / counter) * 1000);
+			std::string newTitle = "OpenGL " + FPS + "FPS / " + ms + "ms";
+			glfwSetWindowTitle(window, newTitle.c_str());
+
+			// Resets times and counter
+			prevTime = currTime;
+			counter = 0;
+		}
+
 		// Specify the color of the background
 		glClearColor(0.4f, 0.74f, 1.0f, 1.0f);
 		// Clean the back buffer and assign the new color to it
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-		camera.Inputs(window);
+		camera.Inputs(window, deltaTime);
 		camera.updateMatrix(80.0f, 0.1f, 100.0f);
 
 		// Draw non stencil models
