@@ -4,6 +4,9 @@ int windowWidth = 1280;
 int windowHeight = 720;
 Camera camera(windowWidth, windowHeight, glm::vec3(0.0f, 2.0f, 2.0f));
 
+unsigned int samples = 8;
+float gamma = 2.2f;
+
 // Vertices coordinates
 Vertex floorVertices[] =
 { //               COORDINATES           /            COLORS          /           NORMALS         /       TEXTURE COORDINATES    //
@@ -33,6 +36,7 @@ int main()
 	// Tell GLFW what version of OpenGL we are using 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_SAMPLES, samples);
 	// Tell GLFW we are using the CORE profile
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -69,9 +73,12 @@ int main()
 	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
 	// Enables the Stencil Buffer
-	glEnable(GL_STENCIL_TEST);
+	//glEnable(GL_STENCIL_TEST);
 	// Sets rules for outcomes of stecil tests
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+	glEnable(GL_MULTISAMPLE);
+	glEnable(GL_FRAMEBUFFER_SRGB);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
@@ -97,8 +104,8 @@ int main()
 		timeDiff = currTime - prevTime;
 		counter++;
 
-		deltaTime = currTime - prevTimeDelta;
-		prevTimeDelta = currTime;
+		deltaTime = (float)currTime - prevTimeDelta;
+		prevTimeDelta = (float)currTime;
 
 		if (timeDiff >= 1.0 / 30.0)
 		{
@@ -114,7 +121,7 @@ int main()
 		}
 
 		// Specify the color of the background
-		glClearColor(0.4f, 0.74f, 1.0f, 1.0f);
+		glClearColor(pow(0.4f, gamma), pow(0.74f, gamma), pow(1.0f, gamma), 1.0f);
 		// Clean the back buffer and assign the new color to it
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -123,7 +130,9 @@ int main()
 
 		// Draw non stencil models
 		floor.Draw(shaderProgram, camera);
+		goblin.Draw(shaderProgram, camera);
 
+		/*
 		// Make it so the stencil test always passes
 		glStencilFunc(GL_ALWAYS, 1, 0xFF);
 		// Enable modifying of the stencil buffer
@@ -149,6 +158,7 @@ int main()
 		glStencilFunc(GL_ALWAYS, 0, 0xFF);
 		// Enable the depth buffer
 		glEnable(GL_DEPTH_TEST);
+		*/
 
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
