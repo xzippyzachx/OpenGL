@@ -160,8 +160,6 @@
     <ClCompile Include="VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Users\zacha\Downloads\framebuffer.frag" />
-    <None Include="C:\Users\zacha\Downloads\framebuffer.vert" />
     <None Include="default.frag" />
     <None Include="default.vert" />
     <None Include="light.frag" />

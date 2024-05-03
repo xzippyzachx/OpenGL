@@ -87,6 +87,9 @@ int main()
 	glFrontFace(GL_CCW);
 
 	Model goblin("models/goblin/goblin.gltf");
+	goblin.position = glm::vec3(0.0f, 0.0f, 1.0f);
+	Model tree("models/tree/Tree.gltf");
+	tree.position = glm::vec3(0.0f, 0.0f, -5.0f);
 	Model floor("models/floor/Floor.gltf");
 
 	double prevTime = 0.0f;
@@ -127,7 +130,7 @@ int main()
 
 	// Matrices needed for the light's perspective
 	glm::mat4 orthgonalProjection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 75.0f);
-	glm::mat4 lightView = glm::lookAt(20.0f * lightPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 lightView = glm::lookAt(25.0f * lightPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 lightProjection = orthgonalProjection * lightView;
 
 	shadowMapProgram.Activate();
@@ -165,6 +168,7 @@ int main()
 
 		// Draw scene for shadow map
 		goblin.Draw(shadowMapProgram, camera);
+		tree.Draw(shadowMapProgram, camera);
 
 		// Switch back to the default framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -187,9 +191,10 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, shadowMap);
 		glUniform1i(glGetUniformLocation(shaderProgram.ID, "shadowMap"), 2);
 
-		// Draw non stencil models
+		// Draw models
 		floor.Draw(shaderProgram, camera);
 		goblin.Draw(shaderProgram, camera);
+		tree.Draw(shaderProgram, camera);
 
 		/*
 		// Make it so the stencil test always passes
