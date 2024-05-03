@@ -108,7 +108,7 @@ int main()
 	glGenFramebuffers(1, &shadowMapFBO);
 
 	// Texture for Shadow Map FBO
-	unsigned int shadowMapWidth = 2048, shadowMapHeight = 2048;
+	unsigned int shadowMapWidth = 4096, shadowMapHeight = 4096;
 	unsigned int shadowMap;
 	glGenTextures(1, &shadowMap);
 	glBindTexture(GL_TEXTURE_2D, shadowMap);
