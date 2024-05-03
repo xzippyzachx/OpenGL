@@ -12,6 +12,6 @@ uniform float outlining;
 
 void main()
 {
-	vec3 crntPos = vec3(model * translation * rotation * scale * vec4(aPos + aNormal * outlining, 1.0f));
-	gl_Position = camMatrix * vec4(crntPos, 1.0);
+	vec3 currPos = vec3(model * translation * rotation * scale * vec4(aPos + aNormal * outlining, 1.0f));
+	gl_Position = camMatrix * vec4(currPos, 1.0);
 }
