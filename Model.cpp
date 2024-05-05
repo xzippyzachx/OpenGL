@@ -2,16 +2,24 @@
 
 Model::Model(const char* file)
 {
-	// Make a JSON object
-	std::string text = get_file_contents(file);
-	JSON = json::parse(text);
+	struct stat sb;
+	if (stat(file, &sb) == 0 && !(sb.st_mode & S_IFDIR))
+	{
+		// Make a JSON object
+		std::string text = get_file_contents(file);
+		JSON = json::parse(text);
 
-	// Get the binary data
-	Model::file = file;
-	data = getData();
+		// Get the binary data
+		Model::file = file;
+		data = getData();
 
-	// Traverse all nodes
-	traverseNode(0);
+		// Traverse all nodes
+		traverseNode(0);
+	}
+	else
+	{
+		std::cout << "The model path is invalid!" << "\n";
+	}
 }
 
 void Model::Draw(Shader& shader, Camera& camera)
@@ -19,7 +27,7 @@ void Model::Draw(Shader& shader, Camera& camera)
 	// Go over all meshes and draw each one
 	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
-		meshes[i].Mesh::Draw(shader, camera, matricesMeshes[i], position);
+		meshes[i].Draw(shader, camera, matricesMeshes[i], position, rotation, scale);
 	}
 }
 
@@ -259,7 +267,7 @@ std::vector<Texture> Model::getTextures()
 			// Load diffuse texture
 			if (texPath.find("baseColor") != std::string::npos)
 			{
-				Texture diffuse = Texture((fileDirectory + texPath).c_str(), "diffuse", loadedTex.size());
+				Texture diffuse = Texture((fileDirectory + texPath).c_str(), "diffuse", static_cast<int>(loadedTex.size()));
 				textures.push_back(diffuse);
 				loadedTex.push_back(diffuse);
 				loadedTexName.push_back(texPath);
@@ -267,7 +275,7 @@ std::vector<Texture> Model::getTextures()
 			// Load specular texture
 			else if (texPath.find("metallicRoughness") != std::string::npos)
 			{
-				Texture specular = Texture((fileDirectory + texPath).c_str(), "specular", loadedTex.size());
+				Texture specular = Texture((fileDirectory + texPath).c_str(), "specular", static_cast<int>(loadedTex.size()));
 				textures.push_back(specular);
 				loadedTex.push_back(specular);
 				loadedTexName.push_back(texPath);
@@ -305,27 +313,27 @@ std::vector<Vertex> Model::assembleVertices
 std::vector<glm::vec2> Model::groupFloatsVec2(std::vector<float> floatVec)
 {
 	std::vector<glm::vec2> vectors;
-	for (int i = 0; i < floatVec.size(); i)
+	for (int i = 0; i < floatVec.size(); i += 2)
 	{
-		vectors.push_back(glm::vec2(floatVec[i++], floatVec[i++]));
+		vectors.push_back(glm::vec2(floatVec[i+1], floatVec[i]));
 	}
 	return vectors;
 }
 std::vector<glm::vec3> Model::groupFloatsVec3(std::vector<float> floatVec)
 {
 	std::vector<glm::vec3> vectors;
-	for (int i = 0; i < floatVec.size(); i)
+	for (int i = 0; i < floatVec.size(); i += 3)
 	{
-		vectors.push_back(glm::vec3(floatVec[i++], floatVec[i++], floatVec[i++]));
+		vectors.push_back(glm::vec3(floatVec[i+2], floatVec[i+1], floatVec[i]));
 	}
 	return vectors;
 }
 std::vector<glm::vec4> Model::groupFloatsVec4(std::vector<float> floatVec)
 {
 	std::vector<glm::vec4> vectors;
-	for (int i = 0; i < floatVec.size(); i)
+	for (int i = 0; i < floatVec.size(); i += 4)
 	{
-		vectors.push_back(glm::vec4(floatVec[i++], floatVec[i++], floatVec[i++], floatVec[i++]));
+		vectors.push_back(glm::vec4(floatVec[i+3], floatVec[i+2], floatVec[i+1], floatVec[i]));
 	}
 	return vectors;
 }

@@ -15,13 +15,13 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Object_9"
+			"name":"Model"
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
-			"name":"Goblin",
+			"name":"Goblin.001",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":0
@@ -33,7 +33,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Object_1",
+			"name":"Object_1.001",
 			"primitives":[
 				{
 					"attributes":{
@@ -64,7 +64,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1158,
+			"count":4400,
 			"max":[
 				0.3844974935054779,
 				1.4478952884674072,
@@ -80,13 +80,13 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1158,
+			"count":4400,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1158,
+			"count":4400,
 			"type":"VEC2"
 		},
 		{
@@ -99,26 +99,26 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":13896,
+			"byteLength":52800,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":13896,
-			"byteOffset":13896,
+			"byteLength":52800,
+			"byteOffset":52800,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":9264,
-			"byteOffset":27792,
+			"byteLength":35200,
+			"byteOffset":105600,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":8916,
-			"byteOffset":37056,
+			"byteOffset":140800,
 			"target":34963
 		}
 	],
@@ -130,7 +130,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":45972,
+			"byteLength":149716,
 			"uri":"goblin.bin"
 		}
 	]
